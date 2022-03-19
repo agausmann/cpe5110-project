@@ -26,8 +26,8 @@ pub fn booth3(a: i32, b: i32, n: u32) -> Results {
         low_bits: n,
     };
 
-    // 3. Let m = ceil((n + 1) / 3).
-    let m = ceiling_div(n + 1, 3);
+    // 3. Let m = ceil((n + 1) / 2).
+    let m = ceiling_div(n + 1, 2);
 
     // 4. Let k = 0.
     let mut k = 0;
@@ -75,8 +75,8 @@ pub fn booth3(a: i32, b: i32, n: u32) -> Results {
         }
     }
 
-    // 10. Shift PQ right ((n + 1) mod 3) bits, preserving sign.
-    pq.value >>= (n + 1) % 3;
+    // 10. Shift PQ right (n mod 2) bits, preserving sign.
+    pq.value >>= n % 2;
 
     // 11. Return the contents of PQ.
     Results {
@@ -109,8 +109,8 @@ pub fn booth4(a: i32, b: i32, n: u32) -> Results {
         low_bits: n,
     };
 
-    // 3. Let m = ceil((n + 1) / 4).
-    let m = ceiling_div(n + 1, 4);
+    // 3. Let m = ceil((n + 1) / 3).
+    let m = ceiling_div(n + 1, 3);
 
     // 4. Let k = 0.
     let mut k = 0;
@@ -166,8 +166,8 @@ pub fn booth4(a: i32, b: i32, n: u32) -> Results {
         }
     }
 
-    // 10. Shift PQ right ((n + 1) mod 4) bits, preserving sign.
-    pq.value >>= (n + 1) % 4;
+    // 10. Shift PQ right (n mod 3) bits, preserving sign.
+    pq.value >>= n % 3;
 
     // 11. Return the contents of PQ.
     Results {
