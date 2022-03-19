@@ -50,7 +50,7 @@ pub fn booth3(a: i32, b: i32, n: u32) -> Results {
             pq.set_high(pq.high() + coefficient * a);
             // (Selection for next group of bits is done
             // in parallel with the addition for this group:)
-            delay += carry_select_delay(n).max(mux_delay(n));
+            delay += carry_select_delay(n).max(mux_delay(3));
             additions += 1;
         } else {
             delay += mux_delay(3);
