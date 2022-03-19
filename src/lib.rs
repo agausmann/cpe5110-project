@@ -14,8 +14,8 @@ pub fn booth3(a: i32, b: i32, n: u32) -> Results {
     let mut delay = 0;
 
     // Multiples of A are precomputed.
-    // Longest time is -3*A which needs an addition:
-    delay += carry_select_delay(n) + complement_delay(n);
+    // Longest time is -2*A which is just shift and complement:
+    delay += complement_delay(n);
 
     // 1. Shift B left, inserting zero for LSB.
     let mut b = b << 1;
@@ -40,10 +40,10 @@ pub fn booth3(a: i32, b: i32, n: u32) -> Results {
         let coefficient = match b & 0b111 {
             0b000 => 0,
             0b001 => 1,
-            0b010 => 2,
-            0b011 => 3,
-            0b100 => -3,
-            0b101 => -2,
+            0b010 => 1,
+            0b011 => 2,
+            0b100 => -2,
+            0b101 => -1,
             0b110 => -1,
             0b111 => 0,
             _ => unreachable!(),
@@ -96,9 +96,9 @@ pub fn booth4(a: i32, b: i32, n: u32) -> Results {
     let mut delay = 0;
 
     // Multiples of A are precomputed.
-    // Longest time is -7*A which has 3 addition terms,
-    // so use carry save plus a 2-term carry select:
-    delay += 4 + carry_select_delay(n) + complement_delay(n);
+    // Longest time is -3*A which has 2 addition terms,
+    // so use a carry select adder:
+    delay += carry_select_delay(n) + complement_delay(n);
 
     // 1. Shift B left, inserting zero for LSB.
     let mut b = b << 1;
@@ -123,18 +123,18 @@ pub fn booth4(a: i32, b: i32, n: u32) -> Results {
         let coefficient = match b & 0b1111 {
             0b0000 => 0,
             0b0001 => 1,
-            0b0010 => 2,
-            0b0011 => 3,
-            0b0100 => 4,
-            0b0101 => 5,
-            0b0110 => 6,
-            0b0111 => 7,
-            0b1000 => -7,
-            0b1001 => -6,
-            0b1010 => -5,
-            0b1011 => -4,
-            0b1100 => -3,
-            0b1101 => -2,
+            0b0010 => 1,
+            0b0011 => 2,
+            0b0100 => 2,
+            0b0101 => 3,
+            0b0110 => 3,
+            0b0111 => 4,
+            0b1000 => -4,
+            0b1001 => -3,
+            0b1010 => -3,
+            0b1011 => -2,
+            0b1100 => -2,
+            0b1101 => -1,
             0b1110 => -1,
             0b1111 => 0,
             _ => unreachable!(),

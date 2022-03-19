@@ -7,11 +7,11 @@ Booth3(A, B, n):
     5. Shift PQ right 2 bits, preserving sign.
     6. Match against the lower 3 bits of B:
         000 or 111 => no action.
-        001 => Add A to P.
-        010 => Add 2*A to P.
-        011 => Add 3*A to P.
-        100 => Subtract 3*A from P.
-        101 => Subtract 2*A from P.
+        001 => Add 1*A to P.
+        010 => Add 1*A to P.
+        011 => Add 2*A to P.
+        100 => Subtract 2*A from P.
+        101 => Subtract 1*A from P.
         110 => Subtract 1*A from P.
     7. Shift B right 2 bits, preserving sign.
     8. Increment k.
@@ -27,19 +27,19 @@ Booth4(A, B, n):
     5. Shift PQ right 3 bits, preserving sign.
     6. Match against the lower 4 bits of B:
         0000 or 1111 => no action.
-        0001 => Add A to P.
-        0010 => Add 2*A to P.
-        0011 => Add 3*A to P.
-        0100 => Add 4*A to P.
-        0101 => Add 5*A to P.
-        0110 => Add 6*A to P.
-        0111 => Add 7*A to P.
-        1000 => Subtract 7*A from P.
-        1001 => Subtract 6*A from P.
-        1010 => Subtract 5*A from P.
-        1011 => Subtract 4*A from P.
-        1100 => Subtract 3*A from P.
-        1101 => Subtract 2*A from P.
+        0001 => Add 1*A to P.
+        0010 => Add 1*A to P.
+        0011 => Add 2*A to P.
+        0100 => Add 2*A to P.
+        0101 => Add 3*A to P.
+        0110 => Add 3*A to P.
+        0111 => Add 4*A to P.
+        1000 => Subtract 4*A from P.
+        1001 => Subtract 3*A from P.
+        1010 => Subtract 3*A from P.
+        1011 => Subtract 2*A from P.
+        1100 => Subtract 2*A from P.
+        1101 => Subtract 1*A from P.
         1110 => Subtract 1*A from P.
     7. Shift B right 3 bits, preserving sign.
     8. Increment k.
