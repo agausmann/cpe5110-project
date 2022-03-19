@@ -6,6 +6,9 @@ pub struct Results {
 }
 
 pub fn booth3(a: i32, b: i32, n: u32) -> Results {
+    let a = sign_extend(a, n);
+    let b = sign_extend(b, n);
+
     // Additional counters for results:
     let mut additions = 0;
     let mut delay = 0;
@@ -85,6 +88,9 @@ pub fn booth3(a: i32, b: i32, n: u32) -> Results {
 }
 
 pub fn booth4(a: i32, b: i32, n: u32) -> Results {
+    let a = sign_extend(a, n);
+    let b = sign_extend(b, n);
+
     // Additional counters for results:
     let mut additions = 0;
     let mut delay = 0;
@@ -218,4 +224,13 @@ fn mux_delay(selector_bits: u32) -> u32 {
 
 fn complement_delay(n: u32) -> u32 {
     n
+}
+
+fn sign_extend(x: i32, n: u32) -> i32 {
+    let sign_mask = -1 & !register_mask(n);
+    if x & (1 << (n - 1)) == 0 {
+        x & !sign_mask
+    } else {
+        x | sign_mask
+    }
 }
