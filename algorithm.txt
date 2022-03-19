@@ -27,7 +27,7 @@ Booth4(A, B, n):
     5. Shift PQ right 3 bits, preserving sign.
     6. Match against the lower 4 bits of B:
         0000 or 1111 => no action.
-        001 => Add A to P.
+        0001 => Add A to P.
         0010 => Add 2*A to P.
         0011 => Add 3*A to P.
         0100 => Add 4*A to P.
