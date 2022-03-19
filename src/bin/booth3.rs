@@ -16,10 +16,13 @@ fn main() -> std::io::Result<()> {
             Some(x) => x,
             None => break,
         };
+
         let results = booth3(a, b, n);
+        println!();
         println!("Product: {:b}", results.product);
         println!("Product (hex): {:x}", results.product);
         println!();
+        println!("----------");
     }
 
     Ok(())
