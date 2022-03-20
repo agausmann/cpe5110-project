@@ -18,7 +18,7 @@ pub struct SizedHex(pub i32, pub u32);
 impl fmt::Display for SizedHex {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         for k in (0..self.1).rev() {
-            write!(f, "{}", (self.0 >> (4 * k)) & 0xf)?;
+            write!(f, "{:x}", (self.0 >> (4 * k)) & 0xf)?;
         }
         Ok(())
     }
