@@ -1,3 +1,7 @@
+pub mod util;
+
+use util::{ceiling_div, register_mask, sign_extend};
+
 pub struct Results {
     pub product: i32,
     pub iterations: u32,
@@ -194,14 +198,6 @@ impl DoubleRegister {
     }
 }
 
-fn ceiling_div(a: u32, b: u32) -> u32 {
-    1 + (a - 1) / b
-}
-
-fn register_mask(bits: u32) -> i32 {
-    (1 << bits) - 1
-}
-
 fn carry_select_delay(bits: u32) -> u32 {
     match bits {
         4 => 8,   // 2-2
@@ -223,13 +219,4 @@ fn mux_delay(selector_bits: u32) -> u32 {
 
 fn complement_delay(n: u32) -> u32 {
     n
-}
-
-fn sign_extend(x: i32, n: u32) -> i32 {
-    let sign_mask = -1 & !register_mask(n);
-    if x & (1 << (n - 1)) == 0 {
-        x & !sign_mask
-    } else {
-        x | sign_mask
-    }
 }

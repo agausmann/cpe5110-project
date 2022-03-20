@@ -1,6 +1,9 @@
 use std::io::{stdin, stdout, Write};
 
-use cpe5110_project::booth4;
+use cpe5110_project::{
+    booth4,
+    util::{ceiling_div, SizedBinary, SizedHex},
+};
 
 fn main() -> std::io::Result<()> {
     loop {
@@ -19,9 +22,16 @@ fn main() -> std::io::Result<()> {
         };
 
         let results = booth4(a, b, n);
+        let output_bits = 2 * n;
         println!();
-        println!("Product (bin): {:b}", results.product);
-        println!("Product (hex): {:x}", results.product);
+        println!(
+            "Product (bin): {}",
+            SizedBinary(results.product, output_bits)
+        );
+        println!(
+            "Product (hex): {}",
+            SizedHex(results.product, ceiling_div(output_bits, 4))
+        );
         println!("Iterations (dec): {}", results.iterations);
         println!("Additions (dec): {}", results.additions);
         println!("Gate delay (dec): {}", results.delay);
