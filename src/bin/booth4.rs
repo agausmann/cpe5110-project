@@ -1,6 +1,6 @@
 use std::io::{stdin, stdout, Write};
 
-use cpe5110_project::booth3;
+use cpe5110_project::booth4;
 
 fn main() -> std::io::Result<()> {
     loop {
@@ -18,7 +18,7 @@ fn main() -> std::io::Result<()> {
             None => break,
         };
 
-        let results = booth3(a, b, n);
+        let results = booth4(a, b, n);
         println!();
         println!("Product (bin): {:b}", results.product);
         println!("Product (hex): {:x}", results.product);
