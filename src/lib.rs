@@ -204,11 +204,11 @@ fn register_mask(bits: u32) -> i32 {
 
 fn carry_select_delay(bits: u32) -> u32 {
     match bits {
-        4 => 8,
-        6 => 10,
-        8 => 12,
-        10 => 12,
-        12 => 14,
+        4 => 8,   // 2-2
+        6 => 10,  // 3-3
+        8 => 12,  // 4-4
+        10 => 12, // 4-3-3
+        12 => 14, // 4-4-4
         _ => unimplemented!("{} bit adder", bits),
     }
 }
