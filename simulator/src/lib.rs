@@ -18,8 +18,9 @@ pub fn booth3(a: i32, b: i32, n: u32) -> Results {
     let mut delay = 0;
 
     // Multiples of A are precomputed.
-    // Longest time is -2*A which is just shift and complement:
-    delay += complement_delay(n);
+    // Longest time is -2*A which is just shift and complement,
+    // plus mux and buffer
+    delay += complement_delay(n) + mux_delay(3) + LATCH_DELAY;
 
     // 1. Shift B left, inserting zero for LSB.
     let mut b = b << 1;
@@ -52,15 +53,18 @@ pub fn booth3(a: i32, b: i32, n: u32) -> Results {
             0b111 => 0,
             _ => unreachable!(),
         };
+        let add_delay = carry_select_delay(n) + mux_delay(1);
+        let no_add_delay = mux_delay(1);
+        let lookup_delay = mux_delay(4);
         if coefficient != 0 {
             // ... Add x * A to P:
             pq.set_high(pq.high() + coefficient * a);
             // (Selection for next group of bits is done
             // in parallel with the addition for this group:)
-            delay += carry_select_delay(n).max(mux_delay(3));
+            delay += add_delay.max(lookup_delay);
             additions += 1;
         } else {
-            delay += mux_delay(3);
+            delay += no_add_delay.max(lookup_delay);
         }
 
         // 7. Shift B right 2 bits, preserving sign.
@@ -72,7 +76,7 @@ pub fn booth3(a: i32, b: i32, n: u32) -> Results {
         // 9. If k < m, repeat from step 5.
         if k < m {
             // Shift and latch:
-            delay += 3;
+            delay += LATCH_DELAY;
             continue;
         } else {
             break;
@@ -100,9 +104,9 @@ pub fn booth4(a: i32, b: i32, n: u32) -> Results {
     let mut delay = 0;
 
     // Multiples of A are precomputed.
-    // Longest time is -3*A which has 2 addition terms,
-    // so use a carry select adder:
-    delay += carry_select_delay(n) + complement_delay(n);
+    // Longest time is -3*A which has 2 addition terms, so
+    // use a carry select adder, plus complement, mux, and buffer:
+    delay += carry_select_delay(n) + complement_delay(n) + mux_delay(4) + LATCH_DELAY;
 
     // 1. Shift B left, inserting zero for LSB.
     let mut b = b << 1;
@@ -143,15 +147,18 @@ pub fn booth4(a: i32, b: i32, n: u32) -> Results {
             0b1111 => 0,
             _ => unreachable!(),
         };
+        let add_delay = carry_select_delay(n) + mux_delay(1);
+        let no_add_delay = mux_delay(1);
+        let lookup_delay = mux_delay(4);
         if coefficient != 0 {
             // ... Add x * A to P:
             pq.set_high(pq.high() + coefficient * a);
             // (Selection for next group of bits is done
             // in parallel with the addition for this group:)
-            delay += carry_select_delay(n).max(mux_delay(4));
+            delay += add_delay.max(lookup_delay);
             additions += 1;
         } else {
-            delay += mux_delay(4);
+            delay += no_add_delay.max(lookup_delay);
         }
 
         // 7. Shift B right 3 bits, preserving sign.
@@ -210,13 +217,11 @@ fn carry_select_delay(bits: u32) -> u32 {
 }
 
 fn mux_delay(selector_bits: u32) -> u32 {
-    match selector_bits {
-        3 => 2,
-        4 => 2,
-        _ => unimplemented!("{} bit mux", selector_bits),
-    }
+    selector_bits + 1
 }
 
 fn complement_delay(n: u32) -> u32 {
     n
 }
+
+const LATCH_DELAY: u32 = 3;
