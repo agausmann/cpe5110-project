@@ -1,27 +1,40 @@
 use std::io::{stdin, stdout, Write};
 
 use cpe5110_project::{
-    booth4,
+    booth3, booth4,
     util::{ceiling_div, SizedBinary, SizedHex},
+    Results,
 };
+
+macro_rules! unwrap_or_break {
+    ($option:expr) => {
+        match $option {
+            Some(x) => x,
+            None => break,
+        }
+    };
+}
 
 fn main() -> std::io::Result<()> {
     loop {
         println!();
-        let a = match prompt_binary_i32("Multiplicand (bin): ")? {
-            Some(x) => x,
-            None => break,
-        };
-        let b = match prompt_binary_i32("Multiplier (bin): ")? {
-            Some(x) => x,
-            None => break,
-        };
-        let n = match prompt_and_then("Bits (dec): ", |line| line.trim().parse::<u32>().ok())? {
-            Some(x) => x,
-            None => break,
-        };
+        let booth_fn = unwrap_or_break!(prompt_and_then(
+            "Group size (3 or 4): ",
+            |line| match line.trim() {
+                "3" => Some(booth3 as fn(i32, i32, u32) -> Results),
+                "4" => Some(booth4 as fn(i32, i32, u32) -> Results),
+                _ => None,
+            }
+        )?);
 
-        let results = booth4(a, b, n);
+        let a = unwrap_or_break!(prompt_binary_i32("Multiplicand (bin): ")?);
+        let b = unwrap_or_break!(prompt_binary_i32("Multiplier (bin): ")?);
+        let n = unwrap_or_break!(prompt_and_then("Bits (dec): ", |line| line
+            .trim()
+            .parse::<u32>()
+            .ok())?);
+
+        let results = booth_fn(a, b, n);
         let output_bits = 2 * n;
         println!();
         println!(
@@ -38,6 +51,7 @@ fn main() -> std::io::Result<()> {
         println!();
         println!("----------");
     }
+    println!();
 
     Ok(())
 }
